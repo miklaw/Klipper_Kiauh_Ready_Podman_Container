@@ -1,0 +1,36 @@
+version: '2'
+
+services:
+  klipper:
+    image: localhost/klipper-image # Ensure this image is built from your updated Containerfile
+    container_name: kiauh
+    privileged: true
+    ports:
+      - "7125:7125"
+      - "6680:80"
+    restart: unless-stopped
+    volumes:
+      # Bind mount for serial devices
+      - /dev/serial/by-id:/dev/serial/by-id:Z
+      - /home/pi/klippy:/home/restore:Z
+      - klippy_home:/home/klippy:Z
+      # mount config as etc2, usr2,lib2 the first time, and copy the contents of the originals to the new ones using cp -a -r /etc/* /etc2/ to preserver all ownership and permissions.
+      # copy usr and lib the same way.  Then mount the volumes so that they are persistent and rerun podman compose.
+      #- etc:/etc2
+      - etc:/etc
+      #- lib:/lib2
+      - lib:/lib
+    devices:
+      - /dev/ttyACM0:/dev/ttyACM0
+    group_add:
+      - "986"
+volumes:
+  klippy_home:
+  etc:
+    driver: local
+    driver_opts:
+      o: suid=0,sgid
+  lib:
+    driver: local
+    driver_opts:
+      o: suid=0,sgid
