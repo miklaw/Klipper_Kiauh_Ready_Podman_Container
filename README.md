@@ -7,3 +7,5 @@ This Podman Containerfile will prepare a container to work with kiauh to install
 The generated image will be less than 5GB, but you need to ensure that there is 50 GB of space available in /var/tmp, or link /var/tmp somewhere with enough space for the build.
 
 This container will need to be rootful in order to use the usb port for the 3D printer.  When you create the image, and when you compose the container, use sudo.
+
+Moonraker-Obico does not currently connect to the container.  There is an issue with the handshake.
